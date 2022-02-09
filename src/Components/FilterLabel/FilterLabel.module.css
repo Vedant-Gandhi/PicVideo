@@ -1,0 +1,18 @@
+.root
+{
+    padding: 3px 16px;
+    font-size: 0.8rem;
+    color: rgb(80, 80, 80);
+    background-color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    user-select: none;
+    transition: all 400ms;
+    border: 2px solid transparent;
+}
+.selected
+{
+    color: rgb(34, 34, 34);
+    border: 2px solid rgb(27, 27, 27);
+    font-weight: bold;
+}

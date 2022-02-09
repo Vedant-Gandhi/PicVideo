@@ -1,0 +1,35 @@
+.root
+{
+    width: 70vw;
+    max-width: 520px;
+    height: 3rem;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+
+}
+.button{
+    height: 100%;
+    padding:0 24px;
+    font-size: 0.9rem;
+    background-color: #383838;
+    border: 0;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: all 500ms;
+}
+.button:hover{
+    background-color: #525252;
+}
+.textBar
+{
+    width: calc(100% - 15%);
+    height: 100%;
+    border: 0;
+    padding: 15px 15px;
+    font-size: 0.9rem !important;
+    outline-width: 0;
+}

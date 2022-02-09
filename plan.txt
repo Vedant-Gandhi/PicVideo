@@ -1,0 +1,9 @@
+The plan is to use an API and use react concepts.
+Concepts to be focused
+1.useState
+2.useEffect
+3.useMemo
+4.useContext
+5.Loading
+6.Form Handling
+7.Fetch API
