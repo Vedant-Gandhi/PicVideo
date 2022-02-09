@@ -49,6 +49,8 @@ function Home() {
     updatesearchQuery("");
     updateData(null)
   };
+
+  
   const [currentFilter, updateFilter] = useState(filters.IMAGE.key);
   const [data, updateData] = useState(null);
   const [searchQuery, updatesearchQuery] = useState("");

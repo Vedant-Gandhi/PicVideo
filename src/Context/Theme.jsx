@@ -6,7 +6,7 @@ const themeColors={
     DARK:1
 }
 const ThemeStoreProvider=({children })=>{
-    const [themeColor,setThemeColor]=useState(themeColors.DARK);
+    const [themeColor,setThemeColor]=useState(themeColors.LIGHT);
     const toggleTheme=()=>{
         (themeColor  === themeColors.DARK) ? setThemeColor(themeColors.LIGHT) : setThemeColor(themeColors.DARK)
     }
