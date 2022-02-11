@@ -3,14 +3,15 @@ import { ThemeStoreContext,themeColors } from "../../Context/Theme";
 import style from "./HolderContainer.module.css";
 
 import PropTypes from 'prop-types'
-function HolderContainer({ video, src, videoWidth, videoHeight, videoPreview }) {
+function HolderContainer({ video, src, videoWidth, videoHeight, videoPreview , key_ }) {
 
   const themeState=ThemeStoreContext()
 
   return (
-    <article className={style.root}>
+    < >
       {video ? (
         <video
+        key={key_}
         crossOrigin="anonymous"
         controls
           autoPlay={false}
@@ -23,9 +24,9 @@ function HolderContainer({ video, src, videoWidth, videoHeight, videoPreview }) 
           <source src={src} type="video/mp4"></source>
         </video>
       ) : (
-        <img src={src}   className={`${style.internal} ${(themeState?.state === themeColors.DARK) ? style.darkCard : ""}`}/>
+        <img key={key_} src={src}   className={`${style.internal} ${(themeState?.state === themeColors.DARK) ? style.darkCard : ""}`}/>
       )}
-    </article>
+    </>
   );
 }
 

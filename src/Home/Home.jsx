@@ -11,52 +11,50 @@ import { SpinnerDotted } from "spinners-react";
 import notFoundImage from "../assets/images/not-found.svg";
 import { themeColors, ThemeStoreContext } from "../Context/Theme";
 
-import dayIcon from '../assets/icons/day_black.svg'
-import nightIcon from '../assets/icons/night_black.svg'
+import dayIcon from "../assets/icons/day_black.svg";
+import nightIcon from "../assets/icons/night_black.svg";
+
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
 /**
- * 
+ *
  * @description The root page which displays the landing page of the website
  */
 function Home() {
-
   /**
    * @description Stores different types of filters
    * @namespace
    * @property {object} IMAGE - The filter as Image
    * @property {String} IMAGE.text - The human readable text for IMAGE filter
    * @property {Number} IMAGE.key - The unique ID to identify the filter
-   * 
+   *
    * @property {Object} VIDEO - The filter as Image
    * @property {String} VIDEO.text - The human readable text for VIDEO filter
    * @property {Number} VIDEO.key - The unique ID to identify the filter
    */
   const filters = {
-    
     IMAGE: { text: "Image", key: 0 },
     VIDEO: { text: "Video", key: 1 },
   };
 
-
   /**
-   * 
-   * @param {UIEvent} evt 
+   *
+   * @param {UIEvent} evt
    * @param {Number} key - The unique key to identify the filter
    * @description Toggles the filter state based on the key
    */
   const onFilterChange = (evt, key) => {
     updateFilter(key);
     updatesearchQuery("");
-    updateData(null)
+    updateData(null);
   };
 
-  
   const [currentFilter, updateFilter] = useState(filters.IMAGE.key);
   const [data, updateData] = useState(null);
   const [searchQuery, updatesearchQuery] = useState("");
   const [isLoading, updateisLoading] = useState(false);
 
-  const themeState=ThemeStoreContext()
+  const themeState = ThemeStoreContext();
 
   const onSearchButton = async () => {
     updateisLoading(true);
@@ -65,6 +63,7 @@ function Home() {
       case filters.IMAGE.key:
         try {
           const result = await apiCalls.getImages(searchQuery);
+          console.log(result.photos);
           updateData(result.photos);
         } catch (error) {
           console.error(error);
@@ -82,10 +81,17 @@ function Home() {
     updateisLoading(false);
   };
 
-
   return (
-    <section className={`${style.root} ${themeState?.state === themeColors.DARK && style.darkRoot}`}>
-      <div className={`${style.uppersection} ${themeState?.state === themeColors.DARK && style.darkUpperSection}`}>
+    <section
+      className={`${style.root} ${
+        themeState?.state === themeColors.DARK && style.darkRoot
+      }`}
+    >
+      <div
+        className={`${style.uppersection} ${
+          themeState?.state === themeColors.DARK && style.darkUpperSection
+        }`}
+      >
         <div className={style.titleWrapper}>
           <h1>PicVideo</h1>
           <p>Search Videos and Photos using Pexels API</p>
@@ -99,7 +105,11 @@ function Home() {
             value={searchQuery}
           ></SearchBar>
           <div className={style.gap}></div>
-          <img src={themeState?.state === themeColors.DARK ? dayIcon : nightIcon} onClick={themeState.toggleTheme} className={style.icon} />
+          <img
+            src={themeState?.state === themeColors.DARK ? dayIcon : nightIcon}
+            onClick={themeState.toggleTheme}
+            className={style.icon}
+          />
         </div>
 
         <div className={style.gap}></div>
@@ -127,38 +137,55 @@ function Home() {
       </div>
 
       <div className={style.lowersection}>
-        <SpinnerDotted
-          enabled={isLoading}
-          size={50}
-          thickness={123}
-          speed={126}
-          color="rgba(57, 172, 166, 1)"
-        />
+        {isLoading && (
+          <section className={style.errorDiv}>
+            <SpinnerDotted
+              enabled={isLoading}
+              size={50}
+              thickness={123}
+              speed={126}
+              color="rgba(57, 172, 166, 1)"
+            />
+          </section>
+        )}
 
         {Array.isArray(data) && data?.length === 0 && !isLoading && (
           <section className={style.errorDiv}>
             {" "}
-            <img src={notFoundImage} alt="" /> <p style={themeState.state === themeColors.DARK ? {transition:"all",transitionDuration:"300ms"}:{}}>Oops Nothing Found!</p>{" "}
+            <img src={notFoundImage} alt="" />{" "}
+            <p
+              style={
+                themeState.state === themeColors.DARK
+                  ? { transition: "all", transitionDuration: "300ms" }
+                  : {}
+              }
+            >
+              Oops Nothing Found!
+            </p>{" "}
           </section>
         )}
-
-        {data?.map((element) => (
-          <>
-  
-            <HolderContainer
-              src={
-                currentFilter === filters.VIDEO.key
-                  ? element?.video_files?.filter((val)=>val?.width == 640 && val?.height == 360)?.[0]?.link
-                  : element?.src?.medium
-              }
-              video={currentFilter === filters.VIDEO.key}
-              videoPreview={element?.video_pictures?.[0]?.picture}
-              videoHeight={180}
-              videoWidth={320}
-            ></HolderContainer>
-           
-          </>
-        ))}
+        {data && data?.length > 0 && (
+          <ResponsiveMasonry  columnsCountBreakPoints={{324: 1, 525: 2, 750: 3 , 998:4 ,1220:5 , 1440:6 , 1600 : 7}}>
+            <Masonry columnsCount={5}>
+              {data?.map((element) => (
+                <HolderContainer
+                  key_={element.id}
+                  src={
+                    currentFilter === filters.VIDEO.key
+                      ? element?.video_files?.filter(
+                          (val) => val?.width == 640 && val?.height == 360
+                        )?.[0]?.link
+                      : element?.src?.small
+                  }
+                  video={currentFilter === filters.VIDEO.key}
+                  videoPreview={element?.video_pictures?.[0]?.picture}
+                  videoHeight={180}
+                  videoWidth={320}
+                ></HolderContainer>
+              ))}
+            </Masonry>
+          </ResponsiveMasonry>
+        )}
       </div>
     </section>
   );
